@@ -2,6 +2,9 @@
   "name": "app",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "14.x"
+  },
   "dependencies": {
     "@react-three/fiber": "^7.0.6",
     "@testing-library/jest-dom": "^5.11.4",
