@@ -1,19 +1,25 @@
-import './App.css';
-import * as THREE from 'three';
-import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
-import { Canvas, extend, useFrame, useLoader, useThree } from 'react-three-fiber';
-import circleImg from './assets/circle.png';
-import { Suspense, useCallback, useMemo, useRef } from 'react';
-extend({OrbitControls})
+import "./App.css";
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import {
+  Canvas,
+  extend,
+  useFrame,
+  useLoader,
+  useThree,
+} from "@react-three/fiber";
+import circleImg from "./assets/circle.png";
+import { Suspense, useCallback, useMemo, useRef } from "react";
+extend({ OrbitControls });
 
-function CameraControls(){
+function CameraControls() {
   const {
     camera,
-    gl: {domElement}
+    gl: { domElement },
   } = useThree();
 
   const controlsRef = useRef();
-  useFrame(() => controlsRef.current.update())
+  useFrame(() => controlsRef.current.update());
 
   return (
     <orbitControls
@@ -32,14 +38,17 @@ function Points() {
   let t = 0;
   let f = 0.002;
   let a = 3;
-  const graph = useCallback((x, z) => {
-    return Math.sin(f * (x ** 2 + z ** 2 + t)) * a;
-  }, [t, f, a])
+  const graph = useCallback(
+    (x, z) => {
+      return Math.sin(f * (x ** 2 + z ** 2 + t)) * a;
+    },
+    [t, f, a]
+  );
 
-  const count = 100
-  const sep = 3
+  const count = 100;
+  const sep = 3;
   let positions = useMemo(() => {
-    let positions = []
+    let positions = [];
 
     for (let xi = 0; xi < count; xi++) {
       for (let zi = 0; zi < count; zi++) {
@@ -51,11 +60,11 @@ function Points() {
     }
 
     return new Float32Array(positions);
-  }, [count, sep, graph])
+  }, [count, sep, graph]);
 
   useFrame(() => {
-    t += 15
-    
+    t += 15;
+
     const positions = bufferRef.current.array;
 
     let i = 0;
@@ -70,14 +79,14 @@ function Points() {
     }
 
     bufferRef.current.needsUpdate = true;
-  })
+  });
 
   return (
     <points>
       <bufferGeometry attach="geometry">
         <bufferAttribute
           ref={bufferRef}
-          attachObject={['attributes', 'position']}
+          attachObject={["attributes", "position"]}
           array={positions}
           count={positions.length / 3}
           itemSize={3}
@@ -87,7 +96,7 @@ function Points() {
       <pointsMaterial
         attach="material"
         map={imgTex}
-        color={0x00AAFF}
+        color={0x00aaff}
         size={0.5}
         sizeAttenuation
         transparent={false}
@@ -107,11 +116,10 @@ function AnimationCanvas() {
       <Suspense fallback={null}>
         <Points />
       </Suspense>
-      <CameraControls/>
+      <CameraControls />
     </Canvas>
   );
 }
-
 
 function App() {
   return (
